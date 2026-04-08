@@ -722,16 +722,209 @@
 .sto-lat { font-size: 6.5rem; margin: 0; line-height: 1; background: linear-gradient(180deg, #FFD700, #FF5722); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5)); text-transform: uppercase; }
 .happy-bday { font-size: 2.2rem; margin-top: 1rem; font-weight: 500; letter-spacing: 2px; }
 
-/* RESPONSIVE */
+/* =========================================
+   RESPONSIVE — Tablet (≤ 1024px)
+   ========================================= */
 @media (max-width: 1024px) {
-  .app-wrapper { flex-direction: column; height: auto; min-height: 100vh; overflow-y: auto; }
-  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--sidebar-border); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1rem; }
-  .sidebar-header { width: 100%; margin-bottom: 0; border: none; }
+  .app-wrapper {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+  .sidebar-header { width: 100%; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .sidebar-section { flex: 1; min-width: 200px; margin-bottom: 0; }
   .sidebar-dynamic-area { display: none; }
-  .maze-area { padding: 8rem 0 2rem 0; }
-  .clue-box { top: 1rem; }
+  .dpad-container { padding-top: 0; }
+  .maze-area { padding: 1.5rem 1rem 2rem; }
   .tile { width: 8vw; height: 8vw; }
   .sto-lat { font-size: 3.5rem; }
   .happy-bday { font-size: 1.5rem; }
   .clue-pl { font-size: 1.4rem; }
+}
+
+/* =========================================
+   RESPONSIVE — Mobile phone (≤ 640px)
+   ========================================= */
+@media (max-width: 640px) {
+
+  /* ── Full-viewport fixed layout ── */
+  .app-wrapper {
+    flex-direction: column;
+    height: 100dvh;
+    min-height: unset;
+    overflow: hidden;
+  }
+
+  /* ── Compact top header (sidebar becomes a slim strip) ── */
+  .sidebar {
+    width: 100%;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    padding: 0.5rem 0.75rem;
+    gap: 0.4rem;
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+    align-items: stretch;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .sidebar-title { font-size: 1.2rem; }
+
+  .sidebar-section {
+    width: 100%;
+    margin-bottom: 0;
+    min-width: unset;
+  }
+
+  .section-title { display: none; }
+
+  /* ── Collected icons row ── */
+  .collection-hud { flex-direction: row; gap: 5px; }
+
+  .hud-item {
+    flex: 1;
+    padding: 5px 8px;
+    font-size: 0.78rem;
+    gap: 5px;
+    border-radius: 8px;
+    min-width: 0;
+  }
+
+  .hud-item.hud-izzie { flex: 1.4; gap: 6px; }
+
+  .izzie-hud-bar { height: 4px; gap: 3px; }
+
+  .sidebar-dynamic-area { display: none; }
+
+  /* ── D-pad: fixed to bottom of viewport ── */
+  .dpad-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    background: var(--sidebar-bg);
+    border-top: 1px solid var(--sidebar-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .dir-btn { width: 3rem; height: 3rem; border-radius: 10px; }
+  .dpad-center { width: 3rem; height: 3rem; }
+  .dpad { gap: 0.3rem; }
+  .dpad-middle { gap: 0.3rem; }
+
+  /* ── Maze area fills remaining space ── */
+  .maze-area {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    /* clear the fixed d-pad (3×3rem buttons + gaps + padding + safe area) */
+    padding-bottom: calc(9.5rem + env(safe-area-inset-bottom, 0px));
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Clue box floats above the grid — doesn't push it down */
+  .clue-box {
+    position: absolute;
+    top: 0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0;
+    padding: 0.45rem 0.9rem;
+    border-radius: 12px;
+    max-width: 95vw;
+    width: max-content;
+  }
+
+  .clue-pl { font-size: 1rem; }
+  .clue-en { font-size: 0.85rem !important; }
+
+  /* ── Board: scale tiles to fit screen ── */
+  .grid-container { padding: 0.5rem; }
+  .board { gap: 3px; }
+  .row  { gap: 3px; }
+
+  .tile {
+    /*
+      Width-fit: (100vw − 2×grid-padding − 9×gap) / 10 ≈ (100vw − 43px) / 10
+      Height-fit: (100dvh − header≈90px − dpad≈155px − grid-overhead≈43px) / 10
+    */
+    width:  min(calc((100vw - 43px) / 10), calc((100dvh - 288px) / 10));
+    height: min(calc((100vw - 43px) / 10), calc((100dvh - 288px) / 10));
+    border-radius: 5px;
+  }
+
+  /* Scale icons to fit smaller tiles */
+  .wall-chess-piece { font-size: 1.1rem; }
+  .player-icon      { font-size: 1.5rem; }
+  .izzie-icon       { font-size: 1.1rem; }
+
+  .kasia-tile svg,
+  .joel-tile  svg,
+  .goal-tile  svg { width: 18px !important; height: 18px !important; }
+
+  /* Celebration */
+  .sto-lat    { font-size: 2.5rem; }
+  .happy-bday { font-size: 1.1rem; letter-spacing: 1px; }
+
+  /* ── Modals cover full screen on mobile ── */
+  .modal-overlay { position: fixed; }
+
+  .modal-content {
+    padding: 1.5rem;
+    max-width: 95vw;
+    max-height: 85dvh;
+    overflow-y: auto;
+    border-radius: 16px;
+  }
+
+  .modal-content h2 { font-size: 1.8rem; margin-bottom: 0.75rem; }
+  .modal-content p  { font-size: 1rem; margin-bottom: 1.25rem; }
+  .modal-btn        { font-size: 1.05rem; padding: 0.8rem 1.8rem; }
+
+  .memory-modal {
+    padding: 1.25rem;
+    padding-top: 2.5rem;
+    width: 95vw;
+    max-width: 95vw;
+  }
+
+  .memory-photo-container.large-featured {
+    width:  min(100%, 260px);
+    height: min(100%, 260px);
+    margin-bottom: 1rem;
+  }
+
+  .memory-quote { font-size: 1.05rem; margin-bottom: 0.75rem; }
 }
