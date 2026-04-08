@@ -84,13 +84,13 @@ const MemoryModal = ({ memoryId, onClose }) => {
 
         <div className="memory-photo-container large-featured">
            <img 
-              src={`/assets/${data.id}.jpg`} 
+              src={`${import.meta.env.BASE_URL}assets/${data.id}.jpg`} 
               alt={data.name}
               className="memory-photo"
               onError={(e) => {
                  e.target.style.display = 'none';
                  e.target.parentElement.classList.add('missing-photo');
-                 e.target.parentElement.innerHTML = `<span>(Drop <b>${data.id}.jpg</b> into public/assets)</span>`;
+                 e.target.parentElement.innerHTML = `<span>(Drop <b>${data.id}.jpg</b> into <b>public/assets/</b>)</span>`;
               }}
            />
         </div>
