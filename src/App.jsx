@@ -15,10 +15,10 @@ const IZZIE_TILES = ['I1', 'I2', 'I3'];
 const countMissingForGift = (set) => REQUIRED_FOR_GIFT.filter((k) => !set.has(k)).length;
 
 const FAMILY_MEMORIES = {
-  'K': { id: 'kasia', name: 'Kasia', quote: "Sto lat Mamo! I brought my camera to capture every moment of your 80th!" },
-  'J': { id: 'joel', name: 'Julek', quote: "Happy 80th! Building this cosmic maze of memories just for you, Babcia!" },
+  'K': { id: 'kasia', name: 'Kasia', quote: "Kochana Mami, życzę Ci luzu i wyzwolenia radości która w Tobie drzemie. Żebyśmy się mogli razem długo chichrać i delektować życiem." },
+  'J': { id: 'joel', name: 'Julek', quote: "Happy 80th birthday Babciu! Życzę Ci zdrowia, szczęścia i miło spędzonego czasu z tymi, których kochasz." },
   'I1': { id: 'izzie1', name: 'Izzie', quote: "Wszystkiego najlepszego Babciu! I love you!" },
-  'I2': { id: 'izzie2', name: 'Izzie', quote: "Babcia, uważaj na ściany — czasem są bardzo blisko!" },
+  'I2': { id: 'izzie2', name: 'Izzie', quote: "Babciu, jestem bardzo wdzięczna, że ​​nauczyłam się grać z Tobą w szachy. To stało się ważną częścią naszego życia!" },
   'I3': { id: 'izzie3', name: 'Izzie', quote: "Chodźmy wzdłuż dolnej ścieżki — prezent czeka tam, gdzie Róg Wolności!" },
 };
 
@@ -212,6 +212,7 @@ export default function App() {
             setClue({ pl: "Wszystkiego Najlepszego!!!", en: "Happy Birthday!!!" });
             setActiveMemory(null); // clear sidebar for celebration
             setComplete(true);
+            playFanfare();
             triggerConfetti();
         }
       }
@@ -232,6 +233,47 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [move]);
+
+  const playFanfare = () => {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+
+    // C5 – E5 – G5 – C6 arpeggio, then a held C-major chord
+    const arpNotes  = [523.25, 659.25, 783.99, 1046.50];
+    const arpTimes  = [0, 0.13, 0.26, 0.39];
+    const chordFreqs = [523.25, 659.25, 783.99];
+
+    arpNotes.forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + arpTimes[i];
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.28, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.start(t);
+      osc.stop(t + 0.36);
+    });
+
+    chordFreqs.forEach((freq) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + 0.58;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.22, t + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 1.1);
+      osc.start(t);
+      osc.stop(t + 1.1);
+    });
+  };
 
   const triggerConfetti = () => {
     const duration = 6000;
