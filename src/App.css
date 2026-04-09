@@ -790,16 +790,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.45rem 1rem;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
     margin-bottom: 0;
     padding-bottom: 0.45rem;
     border-bottom: 1px solid var(--sidebar-border);
     background: var(--sidebar-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
   }
 
-  .sidebar-title { font-size: 1.15rem; }
+  /* Keep the toggle always visible */
+  .theme-toggle { flex-shrink: 0; }
+
+  .sidebar-title {
+    font-size: 1.05rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   /* ── Row 2: maze fills remaining height ── */
   .maze-area {
@@ -892,12 +903,14 @@
 
   .tile {
     /*
-      Width-fit:  (100vw − 2×0.5rem padding − 9×3px gaps) / 10
-      Height-fit: (100dvh − header≈44px − bottom-bar≈150px − grid-overhead≈43px − maze-padding≈4px) / 10
-                = (100dvh − 241px) / 10  →  rounds up to 260px for safety
+      Width-fit:  (100vw − maze-pad 8px − grid-pad 16px − 9×3px gaps) / 10
+                = (100vw − 51px) / 10  →  use 62px for safe margin
+      Height-fit: (100dvh − header≈44px − bottom-bar≈150px − grid-overhead≈43px − maze-pad 8px) / 10
+                = (100dvh − 245px) / 10  →  use 260px for safe margin
+      Hard cap of 9vw ensures no bleed even on fractional-px browsers.
     */
-    width:  min(calc((100vw - 43px) / 10), calc((100dvh - 260px) / 10));
-    height: min(calc((100vw - 43px) / 10), calc((100dvh - 260px) / 10));
+    width:  min(calc((100vw - 62px) / 10), calc((100dvh - 260px) / 10), 9vw);
+    height: min(calc((100vw - 62px) / 10), calc((100dvh - 260px) / 10), 9vw);
     border-radius: 5px;
   }
 

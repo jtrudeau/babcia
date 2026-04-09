@@ -344,7 +344,7 @@ export default function App() {
       */}
       <aside className="sidebar">
           <div className="sidebar-header">
-            <h1 className="sidebar-title whimsical-font">Polanica Maze</h1>
+            <h1 className="sidebar-title whimsical-font">Babcia's Maze!</h1>
             <button className="theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
