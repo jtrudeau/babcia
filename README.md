@@ -1,26 +1,33 @@
-# Babcia 80th — Polanica Maze
+# Babcia's Maze
 
-Vite + React birthday maze. Local dev: `npm install` then `npm run dev`.
+A birthday maze game for Babcia's 80th. Navigate the fog as a chess knight, collect the family icons (Kasia, Julek, three Izzies), and unlock the gift. Each icon reveals a photo and a personal message. Completing the maze triggers confetti and a short fanfare.
 
-## Publish to GitHub Pages
+Live at **https://jtrudeau.github.io/babcia/**
 
-This repo is set up for **project Pages**: `https://jtrudeau.github.io/babcia/`
+---
 
-1. Create the empty repo `jtrudeau/babcia` on GitHub (no README if you want a clean first push).
-2. From **this folder** (`apps/babcia-80th`), if it is the repo root:
+## Local development
 
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Polanica Maze + GitHub Pages deploy"
-   git remote add origin git@github.com:jtrudeau/babcia.git
-   git branch -M main
-   git push -u origin main
-   ```
+```bash
+npm install
+npm run dev
+```
 
-3. On GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions** (not “Deploy from a branch”).
-4. After the first workflow run finishes, open **Actions** to confirm **Deploy to GitHub Pages** succeeded. The site will be at the URL above.
+## Deploy (GitHub Actions → GitHub Pages)
 
-`vite.config.js` sets `base` to `/babcia/` only when `GH_PAGES=1` (set in the workflow). Local `npm run dev` keeps `/` so assets load correctly.
+Push to `main` and the workflow in `.github/workflows/deploy.yml` builds and deploys automatically.
 
-If you rename the GitHub repo, update `repoName` in `vite.config.js` to match.
+On first setup: **GitHub → Settings → Pages → Source: GitHub Actions**.
+
+> `vite.config.js` uses `base: /babcia/` only when `GH_PAGES=1` (set by the workflow). Local dev keeps `/`.  
+> If you rename the repo, update `repoName` in `vite.config.js`.
+
+## Photos
+
+Drop family photos into `public/assets/` before pushing — they are not tracked in git:
+
+| File | Used for |
+| :--- | :--- |
+| `kasia.png` | Kasia's memory card |
+| `joel.jpg` | Julek's memory card |
+| `izzie.png` | All three Izzie cards |
